@@ -39,13 +39,11 @@ void loop() {
 
     // Reads sensor value
     uint16_t position = qtr.readLineBlack(sensorValues);
-
     Serial.println(position);
 
     // Turns of or on according to switch state
     if (digitalRead(7) == LOW) {
         stateMachine.state(sensorValues, position);
-
     } else {
         motorA.forward(0);
         motorB.forward(0);

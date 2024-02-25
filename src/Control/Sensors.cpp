@@ -4,14 +4,16 @@
 
 #include "Control/Sensors.hpp"
 
-
+// Constructor for sensors
 Sensors::Sensors(int sensorCount_, QTRSensors& qtr_) : sensorCount(sensorCount_), qtr(qtr_) {}
 
+// Setup for sensors
 void Sensors::setup() {
     qtr.setTypeRC();
     qtr.setSensorPins((const uint8_t[]) {2, 3, 4, 5, 6, 14, 15, 16, 17, 18}, sensorCount);
 }
 
+// Function for calibrating sensors
 void Sensors::calibrate() {
     delay(500);
     pinMode(LED_BUILTIN, OUTPUT);
@@ -37,6 +39,7 @@ void Sensors::calibrate() {
     delay(1000);
 }
 
+// Function for returning reference for QTR
 QTRSensors& Sensors::getQTRSensor() {
     return qtr;
 }

@@ -11,13 +11,13 @@
 /**
  * Sensors class for initializing and reading sensor
  */
-class Sensors {
+class Sensors{
 public:
     /**
      * Constructor for initializing sensor
      * @param numSensors Number of sensors in use
      */
-    Sensors(int sensorCount_, QTRSensors& qtr_);
+    explicit Sensors(int sensorCount_, QTRSensors& qtr_);
 
     /**
      * Setting up sensor
