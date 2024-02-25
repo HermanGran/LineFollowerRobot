@@ -8,6 +8,9 @@
 #include <Arduino.h>
 #include <QTRSensors.h>
 
+/**
+ * Sensors class for initializing and reading sensor
+ */
 class Sensors {
 public:
     /**

@@ -10,6 +10,8 @@
 ## Overview
 This is a school project for a line follower robot. 
 
+![](data/CAD_Alt.png)
+
 ## Installation and Setup
 
 ### 1. **Clone the repository:**

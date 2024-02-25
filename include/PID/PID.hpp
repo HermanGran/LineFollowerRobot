@@ -8,7 +8,6 @@
 /**
  * PID class is for defining the values and computing
  */
-
 #include "Control/Sensors.hpp"
 
 class PID{

@@ -7,6 +7,9 @@
 
 #include <Arduino.h>
 
+/**
+ * Motor class for initialising and driving motors
+ */
 class Motor{
 public:
     /**
