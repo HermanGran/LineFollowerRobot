@@ -45,7 +45,7 @@ void loop() {
     if (digitalRead(7) == LOW) {
         stateMachine.state(sensorValues, position);
     } else {
-        motorA.forward(0);
-        motorB.forward(0);
+        motorA.stop();
+        motorB.stop();
     }
 }

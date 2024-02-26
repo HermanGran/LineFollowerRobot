@@ -20,3 +20,9 @@ void Motor::reverse(int motorSpeed_) const {
     digitalWrite(output, HIGH);
     analogWrite(PWM, motorSpeed_);
 }
+
+void Motor::stop() const {
+    digitalWrite(input, LOW);
+    digitalWrite(output, LOW);
+    analogWrite(PWM, 0);
+}
