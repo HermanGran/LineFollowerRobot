@@ -32,6 +32,9 @@ public:
      */
     void reverse(int motorSpeed_) const;
 
+    /**
+     * Function for stopping motor
+     */
     void stop() const;
 
 private:
