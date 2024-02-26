@@ -12,9 +12,9 @@ Motor motorB(12, 13, 11);
 // PID
 PID pid(0.2,   // P
         0,      // I
-        0.5,    // D
-        140,    // Base Speed
-        140,    // Max Speed
+        0,    // D
+        100,    // Base Speed
+        100,    // Max Speed
         4500);  // Target Position
 
 // Initializes state machine (right now if-else)

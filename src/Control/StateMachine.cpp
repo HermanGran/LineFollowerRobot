@@ -30,14 +30,14 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
     // Current state machine (if-else)
     // Will convert to switch cases
-    if (((sensorValues_[0] > 700) && (sensorValues_[2] > 700)) && ((sensorValues_[7] < 500) && (sensorValues_[9] < 500)))  {
+    if (((sensorValues_[0] > 900) && (sensorValues_[2] > 900)) && ((sensorValues_[7] < 200) && (sensorValues_[9] < 200)))  {
         motorA.forward(255);
         motorB.reverse(170);
-        delay(200);
-    } else if (((sensorValues_[7] > 700) && (sensorValues_[9] > 700)) && ((sensorValues_[0] < 500) && (sensorValues_[2] < 500))) {
+        delay(150);
+    } else if (((sensorValues_[7] > 900) && (sensorValues_[9] > 900)) && ((sensorValues_[0] < 200) && (sensorValues_[2] < 200))) {
         motorA.reverse(170);
         motorB.forward(255);
-        delay(200);
+        delay(150);
     } else {
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);
