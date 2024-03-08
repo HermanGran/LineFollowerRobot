@@ -18,6 +18,29 @@ int PID::calculatePID(uint16_t position_) {
     return motorSpeed;
 }
 
+float PID::calculatePIDNew(uint16_t position_) {
+
+    unsigned long currT = micros();
+    float deltaT = ((float)(currT-prevT))/1.0e6;
+    prevT = currT;
+
+    // Error
+    int e = targetPosition - position_;
+
+    // Derivative
+    float dedt = (e-ePrev)/(deltaT);
+
+    // Integral
+    eIntegral = eIntegral + e*deltaT;
+
+    // Control signal
+    float u = kP*e + kD*dedt + kI*eIntegral;
+
+    ePrev = e;
+
+    return u;
+}
+
 // Returns base speed
 int PID::getBaseSpeed() const {
     return baseSpeed;

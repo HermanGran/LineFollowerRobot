@@ -30,6 +30,8 @@ public:
      */
     int calculatePID(uint16_t position_);
 
+    float calculatePIDNew(uint16_t position_);
+
     /**
      * Function for retrieving base speed
      * @return base speed
@@ -61,6 +63,11 @@ private:
 
     const int targetPosition;
     int position;
+
+    // New test values
+    unsigned long prevT = 0;
+    float ePrev = 0;
+    float eIntegral = 0;
 };
 
 #endif //LINEFOLLOWERROBOT_PID_HPP

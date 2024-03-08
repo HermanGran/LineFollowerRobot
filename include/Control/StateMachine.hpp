@@ -26,6 +26,8 @@ public:
      */
     StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_);
 
+    void newState(const uint16_t *sensorValues_, uint16_t position_);
+
     /**
      * Function for changing state of robot, currently if-else
      * @param sensorValues_ Takes in a pointer to the sensor values
