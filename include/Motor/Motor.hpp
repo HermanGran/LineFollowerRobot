@@ -20,8 +20,6 @@ public:
      */
     Motor(int input_, int output_, int PWM_);
 
-    void spinMotor(float pwm_);
-
     /**
      * Function for driving forward
      * @param motorSpeed The wanted speed

@@ -30,6 +30,11 @@ public:
      */
     int calculatePID(uint16_t position_);
 
+    /**
+     * Function for calculating wanted motor speed, testing function
+     * @param position_ Takes in current position over line
+     * @return Motor speed
+     */
     float calculatePIDNew(uint16_t position_);
 
     /**

@@ -29,6 +29,10 @@ public:
      */
     void calibrate();
 
+    /**
+     * Function for retrieving a reference for QTRSensors
+     * @return Reference for QTRSensors
+     */
     QTRSensors& getQTRSensor();
 
 private:

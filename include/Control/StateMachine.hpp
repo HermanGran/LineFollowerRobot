@@ -26,6 +26,11 @@ public:
      */
     StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_);
 
+    /**
+     * Testing new state
+     * @param sensorValues_ Takes in a pointer to the sensor values
+     * @param position_ Takes in the position of the line relative to the sensor
+     */
     void newState(const uint16_t *sensorValues_, uint16_t position_);
 
     /**
