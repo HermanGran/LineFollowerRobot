@@ -25,7 +25,7 @@ float PID::calculatePIDNew(uint16_t position_) {
     prevT = currT;
 
     // Error
-    int e = targetPosition - position_;
+    double e = targetPosition - (position_ / 100);
 
     // Derivative
     float dedt = (e-ePrev)/(deltaT);

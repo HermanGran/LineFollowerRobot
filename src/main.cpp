@@ -2,20 +2,20 @@
 
 //For sensor
 QTRSensors qtr;
-Sensors sensor(10, qtr);
-uint16_t sensorValues[10];
+Sensors sensor(9, qtr);
+uint16_t sensorValues[9];
 
 // Motors
 Motor motorA(9, 8, 10);
 Motor motorB(12, 13, 11);
 
 // PID
-PID pid(1,   // P
-        0.01,      // I
-        0.02025,    // D
+PID pid(10,   // P
+        0,      // I
+        6,    // D
         120,    // Base Speed
         120,    // Max Speed
-        4500);  // Target Position
+        40);  // Target Position
 
 // Initializes state machine (right now if-else)
 StateMachine stateMachine(pid, motorA, motorB);

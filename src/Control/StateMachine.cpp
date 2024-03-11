@@ -14,6 +14,10 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
     int motorSpeedA = pid.getBaseSpeed() + pid.calculatePIDNew(position_);
     int motorSpeedB = pid.getBaseSpeed() - pid.calculatePIDNew(position_);
 
+    Serial.print(motorSpeedA);
+    Serial.print("   ");
+    Serial.println(motorSpeedB);
+
     // Sets speed equal to max
     if (motorSpeedA > pid.getMaxSpeed()) {
         motorSpeedA = pid.getMaxSpeed();
@@ -30,11 +34,11 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
     // Current state machine (if-else)
     // Will convert to switch cases
-    if (((sensorValues_[0] > 900) && (sensorValues_[2] > 900)) && ((sensorValues_[7] < 200) && (sensorValues_[9] < 200)))  {
+    if (((sensorValues_[0] > 900) && (sensorValues_[2] > 900)) && ((sensorValues_[6] < 200) && (sensorValues_[8] < 200)))  {
         motorA.forward(255);
         motorB.reverse(170);
         delay(150);
-    } else if (((sensorValues_[7] > 900) && (sensorValues_[9] > 900)) && ((sensorValues_[0] < 200) && (sensorValues_[2] < 200))) {
+    } else if (((sensorValues_[6] > 900) && (sensorValues_[8] > 900)) && ((sensorValues_[0] < 200) && (sensorValues_[2] < 200))) {
         motorA.reverse(170);
         motorB.forward(255);
         delay(150);
