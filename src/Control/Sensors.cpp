@@ -10,7 +10,7 @@ Sensors::Sensors(int sensorCount_, QTRSensors& qtr_) : sensorCount(sensorCount_)
 // Setup for sensors
 void Sensors::setup() {
     qtr.setTypeRC();
-    qtr.setSensorPins((const uint8_t[]) {2, 3, 4, 5, 6, 14, 15, 16, 17}, sensorCount);
+    qtr.setSensorPins((const uint8_t[]) {4, 5, 6, 7, 8, 9, 10, 11, 12}, sensorCount);
 }
 
 // Function for calibrating sensors

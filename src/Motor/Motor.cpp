@@ -4,6 +4,7 @@
 
 #include "Motor/Motor.hpp"
 
+
 // Constructor for motor class
 Motor::Motor(int input_, int output_, int PWM_) : input(input_), output(output_), PWM(PWM_) {}
 

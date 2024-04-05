@@ -6,8 +6,8 @@ Sensors sensor(9, qtr);
 uint16_t sensorValues[9];
 
 // Motors
-Motor motorA(9, 8, 10);
-Motor motorB(12, 13, 11);
+Motor motorA(20, 19, 18);
+Motor motorB(21, 22, 23);
 
 // PID
 PID pid(10,   // P
