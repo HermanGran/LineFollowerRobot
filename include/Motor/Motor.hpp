@@ -20,6 +20,8 @@ public:
      */
     Motor(int input_, int output_, int PWM_);
 
+    void setup();
+
     /**
      * Function for driving forward
      * @param motorSpeed The wanted speed

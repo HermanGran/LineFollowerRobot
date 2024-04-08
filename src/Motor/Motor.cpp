@@ -9,6 +9,12 @@
 Motor::Motor(int input_, int output_, int PWM_) : input(input_), output(output_), PWM(PWM_) {}
 
 // Function for spinning motor forward
+void Motor::setup() {
+    pinMode(output, OUTPUT);
+    pinMode(input, OUTPUT);
+    pinMode(PWM, OUTPUT);
+}
+
 void Motor::forward(int motorSpeed_) const {
     digitalWrite(input, HIGH);
     digitalWrite(output, LOW);

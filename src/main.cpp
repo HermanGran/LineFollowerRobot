@@ -21,14 +21,17 @@ PID pid(10,   // P
 StateMachine stateMachine(pid, motorA, motorB);
 
 // Pin for switch
-const int switchPin = 7;
+//const int switchPin = 7;
 
 void setup() {
     Serial.begin(9600);
 
     // Switch initialization
-    pinMode(switchPin, INPUT_PULLUP);
+    //pinMode(switchPin, INPUT_PULLUP);
     pinMode(LED_BUILTIN, OUTPUT);
+
+    motorA.setup();
+    motorB.setup();
 
     // Sensor setup
     sensor.setup();
@@ -41,11 +44,15 @@ void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     Serial.println(position);
 
+    stateMachine.state(sensorValues, position);
+
     // Turns of or on according to switch state
+    /*
     if (digitalRead(7) == LOW) {
-        stateMachine.state(sensorValues, position);
+
     } else {
         motorA.stop();
         motorB.stop();
     }
+    */
 }
