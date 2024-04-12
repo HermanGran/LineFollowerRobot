@@ -4,21 +4,8 @@
 PID::PID(double kP_, double kI_, double kD_, int baseSpeed_, int maxSpeed_, int targetPosition_) : kP(kP_), kI(kI_), kD(kD_), baseSpeed(baseSpeed_), maxSpeed(maxSpeed_), targetPosition(targetPosition_) {}
 
 // Calculates wanted motor speed
-int PID::calculatePID(uint16_t position_) {
 
-    int error = targetPosition - position_;
-
-    double P = error;
-    double I = I + error;
-    double D = error - lastError;
-    lastError = error;
-
-    motorSpeed = (P * kP) + (I * kI) + (D * kD);
-
-    return motorSpeed;
-}
-
-float PID::calculatePIDNew(uint16_t position_) {
+float PID::calculatePID(uint16_t position_) {
 
     unsigned long currT = micros();
     float deltaT = ((float)(currT-prevT))/1.0e6;

@@ -28,14 +28,7 @@ public:
      * @param position_ Takes in current position over line
      * @return returns motor speed
      */
-    int calculatePID(uint16_t position_);
-
-    /**
-     * Function for calculating wanted motor speed, testing function
-     * @param position_ Takes in current position over line
-     * @return Motor speed
-     */
-    float calculatePIDNew(uint16_t position_);
+    float calculatePID(uint16_t position_);
 
     /**
      * Function for retrieving base speed

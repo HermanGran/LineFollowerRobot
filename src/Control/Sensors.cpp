@@ -15,28 +15,24 @@ void Sensors::setup() {
 
 // Function for calibrating sensors
 void Sensors::calibrate() {
+
+    // LED pinMode
+    pinMode(14, OUTPUT);
+    pinMode(15, OUTPUT);
+
     delay(500);
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(14, LOW);
 
     for (uint16_t i = 0; i < 400; i++) {
         qtr.calibrate();
     }
-    digitalWrite(LED_BUILTIN, LOW);
 
-    for (uint8_t i = 0; i < sensorCount; i++) {
-        Serial.print(qtr.calibrationOn.minimum[i]);
-        Serial.print(' ');
-    }
-    Serial.println();
-
-    for (uint8_t i = 0; i < sensorCount; i++) {
-        Serial.print(qtr.calibrationOn.maximum[i]);
-        Serial.print(' ');
-    }
-    Serial.println();
-    Serial.println();
-    delay(1000);
+    digitalWrite(14, HIGH);
+    delay(100);
+    digitalWrite(15, LOW);
+    delay(500);
+    digitalWrite(15, HIGH);
+    delay(500);
 }
 
 // Function for returning reference for QTR
