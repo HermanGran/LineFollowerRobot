@@ -21,14 +21,18 @@ public:
      * @param maxSpeed_ Sets max speed
      * @param targetPosition_ Sets target position for PID
      */
-    PID(double kP_, double kI_, double kD_, int baseSpeed_, int maxSpeed_, int targetPosition_);
+    PID(int baseSpeed_, int maxSpeed_, int targetPosition_);
+
+    void setPID(double kP_, double kI_, double kD_);
+
+    void setAggressivePID(double aggressiveP_, double aggressiveI_, double aggressiveD_);
 
     /**
      * Function for calculating wanted motor speed
      * @param position_ Takes in current position over line
      * @return returns motor speed
      */
-    float calculatePID(uint16_t position_);
+    float calculatePID(uint16_t position_, int aggressive);
 
     /**
      * Function for retrieving base speed
@@ -49,9 +53,13 @@ public:
     int getTargetPosition() const;
 
 private:
-    const double kP;
-    const double kI;
-    const double kD;
+    double kP;
+    double kI;
+    double kD;
+
+    double aggressiveP;
+    double aggressiveI;
+    double aggressiveD;
 
     double lastError;
 

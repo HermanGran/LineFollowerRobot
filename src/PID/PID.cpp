@@ -1,11 +1,22 @@
 #include "PID/PID.hpp"
 
 // Constructor for PID class
-PID::PID(double kP_, double kI_, double kD_, int baseSpeed_, int maxSpeed_, int targetPosition_) : kP(kP_), kI(kI_), kD(kD_), baseSpeed(baseSpeed_), maxSpeed(maxSpeed_), targetPosition(targetPosition_) {}
+PID::PID(int baseSpeed_, int maxSpeed_, int targetPosition_) : baseSpeed(baseSpeed_), maxSpeed(maxSpeed_), targetPosition(targetPosition_) {}
+
+void PID::setPID(double kP_, double kI_, double kD_) {
+    kP = kP_;
+    kI = kI_;
+    kD = kD_;
+}
+
+void PID::setAggressivePID(double aggressiveP_, double aggressiveI_, double aggressiveD_) {
+    aggressiveP = aggressiveP_;
+    aggressiveI = aggressiveI_;
+    aggressiveD = aggressiveD_;
+}
 
 // Calculates wanted motor speed
-
-float PID::calculatePID(uint16_t position_) {
+float PID::calculatePID(uint16_t position_, int aggressive) {
 
     unsigned long currT = micros();
     float deltaT = ((float)(currT-prevT))/1.0e6;
@@ -19,9 +30,18 @@ float PID::calculatePID(uint16_t position_) {
 
     // Integral
     eIntegral = eIntegral + e*deltaT;
-
+    float u;
     // Control signal
-    float u = kP*e + kD*dedt + kI*eIntegral;
+    switch (aggressive) {
+        case 0:
+            u = kP*e + kD*dedt + kI*eIntegral;
+            break;
+        case 1:
+            u = aggressiveP*e + aggressiveD*dedt + aggressiveI*eIntegral;
+            break;
+        default:
+            u = kP*e + kD*dedt + kI*eIntegral;
+    }
 
     ePrev = e;
 
