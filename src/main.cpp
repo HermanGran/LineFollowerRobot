@@ -9,19 +9,16 @@ uint16_t sensorValues[9];
 Motor motorA(20, 19, 18);
 Motor motorB(21, 22, 23);
 
-// PID
+// PID class
 PID pid(160,    // Base Speed
         160,    // Max Speed
         40);  // Target Position
 
-// Initializes state machine (right now if-else)
+// Initializes state machine
 StateMachine stateMachine(pid, motorA, motorB);
 
-
-// Pin for switch
-//const int switchPin = 7;
-
 void setup() {
+
     // Setting PID values P, I, D
     pid.setPID(18, 0, 1);
     pid.setAggressivePID(30, 0, 0);

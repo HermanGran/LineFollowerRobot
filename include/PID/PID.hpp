@@ -14,17 +14,26 @@ class PID{
 public:
     /**
      * Constructor for PID class
-     * @param kP_ Sets P value
-     * @param kI_ Sets I value
-     * @param kD_ Sets D value
      * @param baseSpeed_ Sets base speed
      * @param maxSpeed_ Sets max speed
      * @param targetPosition_ Sets target position for PID
      */
     PID(int baseSpeed_, int maxSpeed_, int targetPosition_);
 
+    /**
+     * Setting PID Values
+     * @param kP_ Sets P value
+     * @param kI_ Sets I value
+     * @param kD_ Sets D value
+     */
     void setPID(double kP_, double kI_, double kD_);
 
+    /**
+     * Setting aggressive PID values
+     * @param aggressiveP_ Sets P value
+     * @param aggressiveI_ Sets I value
+     * @param aggressiveD_ Sets D value
+     */
     void setAggressivePID(double aggressiveP_, double aggressiveI_, double aggressiveD_);
 
     /**
