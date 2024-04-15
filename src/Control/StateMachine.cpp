@@ -36,11 +36,11 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
     // Current state machine (if-else)
     // Will convert to switch cases
     if (position_ == 0) {
-        motorA.reverse(50);
+        motorA.reverse(20);
         motorB.reverse(200);
     } else if (position_ == 8000) {
         motorA.reverse(200);
-        motorB.reverse(50);
+        motorB.reverse(20);
     } else {
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);

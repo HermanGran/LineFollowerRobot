@@ -10,8 +10,8 @@ Motor motorA(20, 19, 18);
 Motor motorB(21, 22, 23);
 
 // PID class
-PID pid(160,    // Base Speed
-        160,    // Max Speed
+PID pid(120,    // Base Speed
+        120,    // Max Speed
         40);  // Target Position
 
 // Initializes state machine
@@ -20,8 +20,8 @@ StateMachine stateMachine(pid, motorA, motorB);
 void setup() {
 
     // Setting PID values P, I, D
-    pid.setPID(18, 0, 1);
-    pid.setAggressivePID(30, 0, 0);
+    pid.setPID(18, 1, 10);
+    pid.setAggressivePID(60, 0, 0);
 
     // Motor setup
     motorA.setup();
