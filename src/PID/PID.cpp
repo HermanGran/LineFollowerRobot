@@ -1,7 +1,7 @@
 #include "PID/PID.hpp"
 
 // Constructor for PID class
-PID::PID(int baseSpeed_, int maxSpeed_, int targetPosition_) : baseSpeed(baseSpeed_), maxSpeed(maxSpeed_), targetPosition(targetPosition_) {}
+PID::PID(int baseSpeed_, int maxSpeed_, int targetPosition_) : baseSpeed(baseSpeed_), maxSpeed(maxSpeed_), targetPosition(targetPosition_ / 100) {}
 
 void PID::setPID(double kP_, double kI_, double kD_) {
     kP = kP_;

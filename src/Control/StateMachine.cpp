@@ -20,29 +20,50 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
     int motorSpeedB = pid.getBaseSpeed() - pid.calculatePID(position_, overLine);
 
     // Sets speed equal to max
-    if (motorSpeedA > pid.getMaxSpeed()) {
-        motorSpeedA = pid.getMaxSpeed();
-    }
-    if (motorSpeedB > pid.getMaxSpeed()) {
-        motorSpeedB = pid.getMaxSpeed();
-    }
-    if (motorSpeedA < 0) {
-        motorSpeedA = 0;
-    }
-    if (motorSpeedB < 0) {
-        motorSpeedB = 0;
-    }
+    clamp(motorSpeedA, 0, pid.getMaxSpeed());
+    clamp(motorSpeedB, 0, pid.getMaxSpeed());
 
     // Current state machine (if-else)
     // Will convert to switch cases
+    /*
     if (position_ == 0) {
-        motorA.reverse(20);
-        motorB.reverse(200);
+        motorA.forward(40);
+        motorB.reverse(180);
     } else if (position_ == 8000) {
-        motorA.reverse(200);
-        motorB.reverse(20);
+        motorA.reverse(180);
+        motorB.forward(40);
     } else {
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);
     }
+    */
+    motorA.forward(motorSpeedA);
+    motorB.forward(motorSpeedB);
+
+}
+
+void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_) {
+
+    sensorReadings_.add(position_);
+    int deviation = abs(pid.getTargetPosition() - sensorReadings_.getAverage()) / 15;
+
+    int linePos = 0;
+    if ( (position_ > 7000) or (position_ < 2000 )) {
+        linePos = 1;
+    }
+
+    int motorSpeedA = (pid.getBaseSpeed() + deviation) + pid.calculatePID(position_, linePos);
+    int motorSpeedB = (pid.getBaseSpeed() + deviation) - pid.calculatePID(position_, linePos);
+
+    clamp(motorSpeedA, 0, pid.getMaxSpeed());
+    clamp(motorSpeedB, 0, pid.getMaxSpeed());
+
+    motorA.forward(motorSpeedA);
+    motorB.forward(motorSpeedB);
+}
+
+int StateMachine::clamp(int val, int minVal, int maxVal) {
+    if (val < minVal) return minVal;
+    else if (val > maxVal) return maxVal;
+    else return val;
 }

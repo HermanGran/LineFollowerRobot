@@ -10,7 +10,8 @@
 #include "QTRSensors.h"
 #include "Motor/Motor.hpp"
 #include "PID/PID.hpp"
-
+#include "Control/SensorReadings.hpp"
+#include <algorithm>
 /**
  * Class for deciding what state
  * Currently if-else
@@ -31,7 +32,7 @@ public:
      * @param sensorValues_ Takes in a pointer to the sensor values
      * @param position_ Takes in the position of the line relative to the sensor
      */
-    void newState(const uint16_t *sensorValues_, uint16_t position_);
+    void newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_);
 
     /**
      * Function for changing state of robot, currently if-else
@@ -39,6 +40,8 @@ public:
      * @param position_ Takes in the position of the line relative to the sensor
      */
     void state(const uint16_t *sensorValues_, uint16_t position_);
+
+    int clamp(int val, int minVal, int maxVal);
 
 private:
     PID &pid;
