@@ -7,16 +7,34 @@
 
 #include <iostream>
 
+/**
+ * SensorReadings class, used for saving sensor readings in an array
+ */
 class SensorReadings {
 public:
+    /**
+     * Constructor for SensorReadings class
+     * @param capacity_ Max size for array
+     */
     SensorReadings(int capacity_);
 
+    /**
+     * Function for adding value to array
+     * @param value_
+     */
     void add(int value_);
 
+    /**
+     * Destructor for SensorReadings class
+     */
     ~SensorReadings() {
         delete[] buffer;
     }
 
+    /**
+     * Function for getting the average value of all sensor readings
+     * @return The average
+     */
     int getAverage() const;
 
 private:

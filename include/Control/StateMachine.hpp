@@ -41,6 +41,13 @@ public:
      */
     void state(const uint16_t *sensorValues_, uint16_t position_);
 
+    /**
+     * Self made function for clamp
+     * @param val Value to clamp
+     * @param minVal Min value range
+     * @param maxVal Max value range
+     * @return Clamped value
+     */
     int clamp(int val, int minVal, int maxVal);
 
 private:
