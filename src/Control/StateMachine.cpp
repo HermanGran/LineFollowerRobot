@@ -56,8 +56,8 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     }
 
 
-    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
-    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
+    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
+    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
     motorA.forward(motorSpeedA + deviation);
     motorB.forward(motorSpeedB + deviation);
@@ -72,11 +72,11 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     */
 
     if (position_ == 0) {
-        motorA.forward(20);
-        motorB.reverse(70);
+        motorA.forward(110);
+        motorB.forward(15);
     } else if (position_ == 8000) {
-        motorA.reverse(70);
-        motorB.forward(20);
+        motorA.forward(15);
+        motorB.forward(110);
     }
 }
 
