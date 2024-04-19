@@ -11,17 +11,13 @@ StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_) : pid(pid_
 void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
     // Calculates motor speed
-    int overLine = 0;
+    int linePos = 0;
     if ( (position_ > 7000) or (position_ < 2000 )) {
-        overLine = 1;
+        linePos = 1;
     }
 
-    int motorSpeedA = pid.getBaseSpeed() + pid.calculatePID(position_, overLine);
-    int motorSpeedB = pid.getBaseSpeed() - pid.calculatePID(position_, overLine);
-
-    // Sets speed equal to max
-    clamp(motorSpeedA, 0, pid.getMaxSpeed());
-    clamp(motorSpeedB, 0, pid.getMaxSpeed());
+    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
+    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
 
     // Current state machine (if-else)
     // Will convert to switch cases
@@ -45,21 +41,43 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_) {
 
     sensorReadings_.add(position_);
-    int deviation = abs(pid.getTargetPosition() - sensorReadings_.getAverage()) / 15;
+    int deviation = abs(pid.getTargetPosition() - sensorReadings_.getAverage()) / 75;
 
     int linePos = 0;
-    if ( (position_ > 7000) or (position_ < 2000 )) {
+    if ((position_ > 6500) or (position_ < 1500 )) {
         linePos = 1;
+        digitalWrite(14, LOW);
+        digitalWrite(15, LOW);
+        deviation = deviation*0;
+    } else {
+        linePos = 0;
+        digitalWrite(14, HIGH);
+        digitalWrite(15, HIGH);
     }
 
-    int motorSpeedA = (pid.getBaseSpeed() + deviation) + pid.calculatePID(position_, linePos);
-    int motorSpeedB = (pid.getBaseSpeed() + deviation) - pid.calculatePID(position_, linePos);
 
-    clamp(motorSpeedA, 0, pid.getMaxSpeed());
-    clamp(motorSpeedB, 0, pid.getMaxSpeed());
+    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
+    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
 
-    motorA.forward(motorSpeedA);
-    motorB.forward(motorSpeedB);
+    motorA.forward(motorSpeedA + deviation);
+    motorB.forward(motorSpeedB + deviation);
+
+    /*
+    Serial.print("Position: ");
+    Serial.print(position_);
+    Serial.print("      Average: ");
+    Serial.print(sensorReadings_.getAverage());
+    Serial.print("      Difference: ");
+    Serial.println(abs(sensorReadings_.getAverage() - position_));
+    */
+
+    if (position_ == 0) {
+        motorA.forward(20);
+        motorB.reverse(70);
+    } else if (position_ == 8000) {
+        motorA.reverse(70);
+        motorB.forward(20);
+    }
 }
 
 int StateMachine::clamp(int val, int minVal, int maxVal) {
