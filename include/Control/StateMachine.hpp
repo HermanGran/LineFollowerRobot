@@ -12,6 +12,8 @@
 #include "PID/PID.hpp"
 #include "Control/SensorReadings.hpp"
 #include <algorithm>
+#include "Control/Robotodemetry.hpp"
+
 /**
  * Class for deciding what state
  * Currently if-else
@@ -25,7 +27,7 @@ public:
      * @param motorA_ Takes in right motor
      * @param motorB_ Takes in left motor
      */
-    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_);
+    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdemetry &odemetry);
 
     /**
      * Testing new state
@@ -50,11 +52,15 @@ public:
      */
     int clamp(int val, int minVal, int maxVal);
 
+
+
 private:
     PID &pid;
 
     Motor &motorA;
     Motor &motorB;
+
+    RobotOdemetry &odemetry;
 };
 
 #endif //LINEFOLLOWERROBOT_STATEMACHINE_HPP

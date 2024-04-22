@@ -25,6 +25,7 @@ public:
     bool checkLapCompletion(float x, float y, float threshold = 1.0);
 
     std::vector<std::pair<float, float>> getPath();
+
 private:
     float x, y, theta, wheelbase;
 

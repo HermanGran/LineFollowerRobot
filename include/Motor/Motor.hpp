@@ -6,6 +6,7 @@
 #define LINEFOLLOWERROBOT_MOTORS_HPP
 
 #include <Arduino.h>
+#include "Motor/Encoder.hpp"
 
 /**
  * Motor class for initialising and driving motors
@@ -18,7 +19,7 @@ public:
      * @param output_ Output pin for motor
      * @param PWM_ Output pin for PWM motor
      */
-    Motor(int input_, int output_, int PWM_);
+    Motor(int input_, int output_, int PWM_, Encoder &encoder);
 
     void setup();
 
@@ -39,10 +40,12 @@ public:
      */
     void stop() const;
 
+    Encoder &encoder;
 private:
     int input;
     int output;
     int PWM;
+
 };
 
 #endif //LINEFOLLOWERROBOT_MOTORS_HPP

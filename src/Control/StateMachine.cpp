@@ -5,10 +5,19 @@
 #include "Control/StateMachine.hpp"
 
 // Constructor for state machine class
-StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_) : pid(pid_), motorA(motorA_), motorB(motorB_) {}
+StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdemetry &odemetry) : pid(pid_), motorA(motorA_), motorB(motorB_), odemetry(odemetry) {}
 
 // Function for changing state
 void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
+
+    float dL = motorA.encoder.getDeltaEncoderCount();
+    float dR = motorB.encoder.getDeltaEncoderCount();
+    odemetry.update(dL, dR);
+    odemetry.logPosition(odemetry.getX(), odemetry.getY());
+
+    if ((odemetry.checkLapCompletion(odemetry.getX(), odemetry.getY(), 10)) && (odemetry.getPath().size() > 1000)) {
+        digitalWrite(14, LOW);
+    }
 
     // Calculates motor speed
     int linePos = 0;
@@ -40,6 +49,15 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
 void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_) {
 
+    float dL = motorA.encoder.getDeltaEncoderCount();
+    float dR = motorB.encoder.getDeltaEncoderCount();
+    odemetry.update(dL, dR);
+    odemetry.logPosition(odemetry.getX(), odemetry.getY());
+
+    if ((odemetry.checkLapCompletion(odemetry.getX(), odemetry.getY(), 10)) && (odemetry.getPath().size() > 1000)) {
+        digitalWrite(14, LOW);
+    }
+
     sensorReadings_.add(position_);
     int deviation = abs(pid.getTargetPosition() - sensorReadings_.getAverage()) / 75;
 
@@ -69,8 +87,8 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     }
      */
 
-    motorA.forward(motorSpeedA);
-    motorB.forward(motorSpeedB);
+    //motorA.forward(motorSpeedA);
+    //motorB.forward(motorSpeedB);
 
     /*
     Serial.print("Position: ");
