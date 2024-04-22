@@ -59,8 +59,18 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
     int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
-    motorA.forward(motorSpeedA + deviation);
-    motorB.forward(motorSpeedB + deviation);
+    /*
+    if (position_ == 0) {
+        motorA.forward(100);
+        motorB.forward(5);
+    } else if (position_ == 8000) {
+        motorA.forward(5);
+        motorB.forward(100);
+    }
+     */
+
+    motorA.forward(motorSpeedA);
+    motorB.forward(motorSpeedB);
 
     /*
     Serial.print("Position: ");
@@ -70,14 +80,6 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     Serial.print("      Difference: ");
     Serial.println(abs(sensorReadings_.getAverage() - position_));
     */
-
-    if (position_ == 0) {
-        motorA.forward(110);
-        motorB.forward(15);
-    } else if (position_ == 8000) {
-        motorA.forward(15);
-        motorB.forward(110);
-    }
 }
 
 int StateMachine::clamp(int val, int minVal, int maxVal) {
