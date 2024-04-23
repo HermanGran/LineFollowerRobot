@@ -62,3 +62,15 @@ int PID::getMaxSpeed() const {
 int PID::getTargetPosition() const {
     return targetPosition;
 }
+
+int PID::getPValue() const {
+    return kP;
+}
+
+int PID::getIValue() const {
+    return kI;
+}
+
+int PID::getDValue() const {
+    return kD;
+}

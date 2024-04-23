@@ -71,8 +71,8 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);
     } */
-    motorA.forward(30);
-    motorB.forward(30);
+    //motorA.forward(30);
+    //motorB.forward(30);
 
 }
 

@@ -61,6 +61,12 @@ public:
      */
     int getTargetPosition() const;
 
+    int getPValue() const;
+
+    int getIValue() const;
+
+    int getDValue() const;
+
 private:
     double kP;
     double kI;

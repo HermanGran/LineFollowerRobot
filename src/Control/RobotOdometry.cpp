@@ -25,14 +25,6 @@ void RobotOdometry::update(float dL_, float dR_) {
         y += dL * sin(theta);
 
     }
-
-    Serial.print("x: ");
-    Serial.print(x);
-    Serial.print("    y: ");
-    Serial.print(y);
-    Serial.print("    Theta: ");
-    Serial.print(degrees(theta));
-    Serial.print("     ");
 }
 
 float RobotOdometry::getX() const {

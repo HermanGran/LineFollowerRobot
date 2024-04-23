@@ -1,8 +1,7 @@
 #include "Control/StateMachine.hpp"
 #include "Motor/Encoder.hpp"
 #include "Control/RobotOdometry.hpp"
-// For Bluetooth
-
+#include "Control/Connections.hpp"
 
 
 //For sensor
@@ -19,6 +18,9 @@ Motor motorB(21, 22, 23);
 PID pid(100,    // Base Speed
         100,    // Max Speed
         4000);  // Target Position
+
+// For Bluetooth
+Connections connections(pid);
 
 RobotOdometry odometry(16.0);
 
@@ -48,6 +50,8 @@ void setup() {
     pid.setPID(8, 0, 1);
     pid.setAggressivePID(20, 0, 0);
 
+    connections.setup();
+
     pinMode(MotorAencoderA, INPUT);
     pinMode(MotorAencoderB, INPUT);
     pinMode(MotorBencoderA, INPUT);
@@ -71,22 +75,16 @@ void loop() {
     float dR = encoderBCount - prevBCount;
     odometry.update(dL, dR);
 
+    connections.updatePosition(odometry.getX(), odometry.getY(), degrees(odometry.getTheta()));
+    connections.updatePID();
     prevACount = encoderACount;
     prevBCount = encoderBCount;
 
     // Reads sensor value
     uint16_t position = qtr.readLineBlack(sensorValues);
+    stateMachine.newState(sensorValues, position, sensorReadings);
 
-    //
-    stateMachine.state(sensorValues, position);
-
-    if (testMode) {
-        Serial.print("dL: ");
-        Serial.print(dL);
-        Serial.print("    dR: ");
-        Serial.print(dR);
-        Serial.println();
-    }
+    connections.updatePID();
 }
 
 void handleEncoderA() {
