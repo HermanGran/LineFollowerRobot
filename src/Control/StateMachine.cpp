@@ -5,56 +5,42 @@
 #include "Control/StateMachine.hpp"
 
 // Constructor for state machine class
-StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdemetry &odemetry) : pid(pid_), motorA(motorA_), motorB(motorB_), odemetry(odemetry) {}
+StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry) : pid(pid_), motorA(motorA_), motorB(motorB_), odometry(odometry) {}
 
 // Function for changing state
 void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
-    float dL = motorA.encoder.getDeltaEncoderCount();
-    float dR = motorB.encoder.getDeltaEncoderCount();
-    odemetry.update(dL, dR);
-    odemetry.logPosition(odemetry.getX(), odemetry.getY());
-
-    if ((odemetry.checkLapCompletion(odemetry.getX(), odemetry.getY(), 10)) && (odemetry.getPath().size() > 1000)) {
-        digitalWrite(14, LOW);
-    }
-
-    // Calculates motor speed
+    // Checks to see if aggressive PID is needed
     int linePos = 0;
     if ( (position_ > 7000) or (position_ < 2000 )) {
         linePos = 1;
     }
 
-    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
-    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, linePos), 0, pid.getMaxSpeed());
+    // Calculates motor Speed
+    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
+    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
-    // Current state machine (if-else)
-    // Will convert to switch cases
-    /*
+    // Sets the speed for motors
     if (position_ == 0) {
-        motorA.forward(40);
-        motorB.reverse(180);
+        motorA.reverse(20);
+        motorB.reverse(120);
     } else if (position_ == 8000) {
-        motorA.reverse(180);
-        motorB.forward(40);
+        motorA.reverse(120);
+        motorB.reverse(20);
     } else {
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);
     }
-    */
-    motorA.forward(motorSpeedA);
-    motorB.forward(motorSpeedB);
-
 }
 
 void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_) {
 
     float dL = motorA.encoder.getDeltaEncoderCount();
     float dR = motorB.encoder.getDeltaEncoderCount();
-    odemetry.update(dL, dR);
-    odemetry.logPosition(odemetry.getX(), odemetry.getY());
+    odometry.update(dL, dR);
+    odometry.logPosition(odometry.getX(), odometry.getY());
 
-    if ((odemetry.checkLapCompletion(odemetry.getX(), odemetry.getY(), 10)) && (odemetry.getPath().size() > 1000)) {
+    if ((odometry.checkLapCompletion(odometry.getX(), odometry.getY(), 30)) && (odometry.getPath().size() > 1000)) {
         digitalWrite(14, LOW);
     }
 
@@ -77,18 +63,17 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
     int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
     int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
-    /*
+
     if (position_ == 0) {
         motorA.forward(100);
         motorB.forward(5);
     } else if (position_ == 8000) {
         motorA.forward(5);
         motorB.forward(100);
+    } else {
+        motorA.forward(motorSpeedA);
+        motorB.forward(motorSpeedB);
     }
-     */
-
-    //motorA.forward(motorSpeedA);
-    //motorB.forward(motorSpeedB);
 
     /*
     Serial.print("Position: ");

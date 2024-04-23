@@ -2,11 +2,11 @@
 // Created by Herman Hårstad Gran on 22/04/2024.
 //
 
-#include "Control/RobotOdemetry.hpp"
+#include "Control/RobotOdometry.hpp"
 
-RobotOdemetry::RobotOdemetry(float wheelBase_) : x(0.0), y(0.0), theta(0), wheelbase(wheelBase_) {}
+RobotOdometry::RobotOdometry(float wheelBase_) : x(0.0), y(0.0), theta(0), wheelbase(wheelBase_) {}
 
-void RobotOdemetry::update(float dL_, float dR_) {
+void RobotOdometry::update(float dL_, float dR_) {
     float dL = (float(dL_) / 30.0) * M_PI * 2.9;
     float dR = (float(dR_) / 30.0) * M_PI * 2.9;
 
@@ -35,23 +35,23 @@ void RobotOdemetry::update(float dL_, float dR_) {
     Serial.print("     ");
 }
 
-float RobotOdemetry::getX() const {
+float RobotOdometry::getX() const {
     return x;
 }
 
-float RobotOdemetry::getY() const {
+float RobotOdometry::getY() const {
     return y;
 }
 
-float RobotOdemetry::getTheta() const {
+float RobotOdometry::getTheta() const {
     return theta;
 }
 
-void RobotOdemetry::logPosition(float x, float y) {
+void RobotOdometry::logPosition(float x, float y) {
     path.emplace_back(x, y);
 }
 
-bool RobotOdemetry::checkLapCompletion(float x, float y, float threshold) {
+bool RobotOdometry::checkLapCompletion(float x, float y, float threshold) {
     float startX = path.front().first;
     float startY = path.front().second;
     float distance = sqrt((x - startX) * (x - startX) + (y - startY) * (y - startY));
@@ -61,6 +61,6 @@ bool RobotOdemetry::checkLapCompletion(float x, float y, float threshold) {
     return distance <= threshold;
 }
 
-std::vector<std::pair<float, float>> RobotOdemetry::getPath() {
+std::vector<std::pair<float, float>> RobotOdometry::getPath() {
     return path;
 }

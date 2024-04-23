@@ -2,17 +2,17 @@
 // Created by Herman Hårstad Gran on 22/04/2024.
 //
 
-#ifndef LINEFOLLOWERROBOT_ROBOTODEMETRY_HPP
-#define LINEFOLLOWERROBOT_ROBOTODEMETRY_HPP
+#ifndef LINEFOLLOWERROBOT_ROBOTODOMETRY_HPP
+#define LINEFOLLOWERROBOT_ROBOTODOMETRY_HPP
 
 #include <cmath>
 #include <utility>
 #include <vector>
 #include "Arduino.h"
 
-class RobotOdemetry {
+class RobotOdometry {
 public:
-    RobotOdemetry(float wheelBase);
+    RobotOdometry(float wheelBase);
 
     void update(float dL, float dR);
 
@@ -32,4 +32,4 @@ private:
     std::vector<std::pair<float, float>> path;
 };
 
-#endif //LINEFOLLOWERROBOT_ROBOTODEMETRY_HPP
+#endif //LINEFOLLOWERROBOT_ROBOTODOMETRY_HPP

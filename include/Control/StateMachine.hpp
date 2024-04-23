@@ -12,7 +12,7 @@
 #include "PID/PID.hpp"
 #include "Control/SensorReadings.hpp"
 #include <algorithm>
-#include "Control/Robotodemetry.hpp"
+#include "Control/RobotOdometry.hpp"
 
 /**
  * Class for deciding what state
@@ -27,7 +27,7 @@ public:
      * @param motorA_ Takes in right motor
      * @param motorB_ Takes in left motor
      */
-    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdemetry &odemetry);
+    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry);
 
     /**
      * Testing new state
@@ -60,7 +60,7 @@ private:
     Motor &motorA;
     Motor &motorB;
 
-    RobotOdemetry &odemetry;
+    RobotOdometry &odometry;
 };
 
 #endif //LINEFOLLOWERROBOT_STATEMACHINE_HPP

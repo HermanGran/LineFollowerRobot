@@ -16,15 +16,15 @@ void Motor::setup() {
 
 // Function for spinning motors forward
 void Motor::forward(int motorSpeed_) const {
-    digitalWrite(input, LOW);
-    digitalWrite(output, HIGH);
+    digitalWrite(input, HIGH);
+    digitalWrite(output, LOW);
     analogWrite(PWM, motorSpeed_);
 }
 
 // Function for spinning motor in reverse
 void Motor::reverse(int motorSpeed_) const {
-    digitalWrite(input, HIGH);
-    digitalWrite(output, LOW);
+    digitalWrite(input, LOW);
+    digitalWrite(output, HIGH);
     analogWrite(PWM, motorSpeed_);
 }
 

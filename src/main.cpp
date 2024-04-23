@@ -1,6 +1,6 @@
 #include "Control/StateMachine.hpp"
 #include "Motor/Encoder.hpp"
-#include "Control/RobotOdemetry.hpp"
+#include "Control/RobotOdometry.hpp"
 
 //For sensor
 QTRSensors qtr;
@@ -20,16 +20,18 @@ PID pid(100,    // Base Speed
         100,    // Max Speed
         4000);  // Target Position
 
-RobotOdemetry odemetry(16.0);
+RobotOdometry odometry(16.0);
 
 // Initializes state machine
-StateMachine stateMachine(pid, motorA, motorB, odemetry);
+StateMachine stateMachine(pid, motorA, motorB, odometry);
+
+int testMode = 0;
 
 void setup() {
     Serial.begin(9600);
 
     // Setting PID values P, I, D
-    pid.setPID(18, 0, 0.5);
+    pid.setPID(8, 0, 1);
     pid.setAggressivePID(20, 0, 0);
 
     // Motor setup
@@ -47,11 +49,13 @@ void setup() {
 
 void loop() {
 
-    microsecondsToClockCycles(100);
     // Reads sensor value
     uint16_t position = qtr.readLineBlack(sensorValues);
 
-    stateMachine.newState(sensorValues, position, sensorReadings);
+    //
+    stateMachine.state(sensorValues, position);
 
-    Serial.println();
+    if (testMode) {
+        Serial.println();
+    }
 }
