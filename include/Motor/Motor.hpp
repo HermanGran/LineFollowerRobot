@@ -19,7 +19,7 @@ public:
      * @param output_ Output pin for motor
      * @param PWM_ Output pin for PWM motor
      */
-    Motor(int input_, int output_, int PWM_, Encoder &encoder);
+    Motor(int input_, int output_, int PWM_);
 
     void setup();
 
@@ -40,7 +40,6 @@ public:
      */
     void stop() const;
 
-    Encoder &encoder;
 private:
     int input;
     int output;

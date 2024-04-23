@@ -35,18 +35,15 @@ void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
 
 void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_) {
 
-    float dL = motorA.encoder.getDeltaEncoderCount();
-    float dR = motorB.encoder.getDeltaEncoderCount();
-    odometry.update(dL, dR);
     odometry.logPosition(odometry.getX(), odometry.getY());
 
-    if ((odometry.checkLapCompletion(odometry.getX(), odometry.getY(), 30)) && (odometry.getPath().size() > 1000)) {
+    if ((odometry.checkLapCompletion(odometry.getX(), odometry.getY(), 20)) && (odometry.getPath().size() > 1000)) {
         digitalWrite(14, LOW);
     }
 
     sensorReadings_.add(position_);
     int deviation = abs(pid.getTargetPosition() - sensorReadings_.getAverage()) / 75;
-
+    /*
     int linePos = 0;
     if ((position_ > 6500) or (position_ < 1500 )) {
         linePos = 1;
@@ -58,31 +55,25 @@ void StateMachine::newState(const uint16_t *sensorValues_, uint16_t position_, S
         digitalWrite(14, HIGH);
         digitalWrite(15, HIGH);
     }
-
+    */
 
     int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
     int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
-
+    /*
     if (position_ == 0) {
         motorA.forward(100);
-        motorB.forward(5);
+        motorB.forward(10);
     } else if (position_ == 8000) {
-        motorA.forward(5);
+        motorA.forward(10);
         motorB.forward(100);
     } else {
         motorA.forward(motorSpeedA);
         motorB.forward(motorSpeedB);
-    }
+    } */
+    motorA.forward(30);
+    motorB.forward(30);
 
-    /*
-    Serial.print("Position: ");
-    Serial.print(position_);
-    Serial.print("      Average: ");
-    Serial.print(sensorReadings_.getAverage());
-    Serial.print("      Difference: ");
-    Serial.println(abs(sensorReadings_.getAverage() - position_));
-    */
 }
 
 int StateMachine::clamp(int val, int minVal, int maxVal) {

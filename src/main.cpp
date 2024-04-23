@@ -1,6 +1,9 @@
 #include "Control/StateMachine.hpp"
 #include "Motor/Encoder.hpp"
 #include "Control/RobotOdometry.hpp"
+// For Bluetooth
+
+
 
 //For sensor
 QTRSensors qtr;
@@ -8,12 +11,9 @@ Sensors sensor(9, qtr);
 uint16_t sensorValues[9];
 SensorReadings sensorReadings(70);
 
-// Motors and Encoders
-Encoder EncoderMotorA(17, 13);
-Encoder EncoderMotorB(24, 1);
-
-Motor motorA(20, 19, 18, EncoderMotorA);
-Motor motorB(21, 22, 23, EncoderMotorB);
+// Motors
+Motor motorA(20, 19, 18);
+Motor motorB(21, 22, 23);
 
 // PID class
 PID pid(100,    // Base Speed
@@ -27,20 +27,38 @@ StateMachine stateMachine(pid, motorA, motorB, odometry);
 
 int testMode = 0;
 
+
+// ---------- Encoder Stuff --------
+const int MotorAencoderA = 17;
+const int MotorAencoderB = 13;
+const int MotorBencoderA = 24;
+const int MotorBencoderB = 1;
+
+volatile long encoderACount = 0;
+volatile long encoderBCount = 0;
+float prevACount = 0;
+float prevBCount = 0;
+
+void handleEncoderA();
+void handleEncoderB();
+
 void setup() {
     Serial.begin(9600);
-
     // Setting PID values P, I, D
     pid.setPID(8, 0, 1);
     pid.setAggressivePID(20, 0, 0);
 
+    pinMode(MotorAencoderA, INPUT);
+    pinMode(MotorAencoderB, INPUT);
+    pinMode(MotorBencoderA, INPUT);
+    pinMode(MotorBencoderB, INPUT);
+
+    attachInterrupt(digitalPinToInterrupt(MotorAencoderA), handleEncoderA, RISING);
+    attachInterrupt(digitalPinToInterrupt(MotorBencoderA), handleEncoderB, RISING);
+
     // Motor setup
     motorA.setup();
     motorB.setup();
-
-    // Encoder Setup
-    EncoderMotorA.begin();
-    EncoderMotorB.begin();
 
     // Sensor setup
     sensor.setup();
@@ -49,6 +67,13 @@ void setup() {
 
 void loop() {
 
+    float dL = encoderACount - prevACount;
+    float dR = encoderBCount - prevBCount;
+    odometry.update(dL, dR);
+
+    prevACount = encoderACount;
+    prevBCount = encoderBCount;
+
     // Reads sensor value
     uint16_t position = qtr.readLineBlack(sensorValues);
 
@@ -56,6 +81,26 @@ void loop() {
     stateMachine.state(sensorValues, position);
 
     if (testMode) {
+        Serial.print("dL: ");
+        Serial.print(dL);
+        Serial.print("    dR: ");
+        Serial.print(dR);
         Serial.println();
+    }
+}
+
+void handleEncoderA() {
+    if (digitalRead(MotorAencoderA) > digitalRead(MotorAencoderB)) {
+        encoderACount++;
+    } else {
+        encoderACount--;
+    }
+}
+
+void handleEncoderB() {
+    if (digitalRead(MotorBencoderA) > digitalRead(MotorBencoderB)) {
+        encoderBCount++;
+    } else {
+        encoderBCount--;
     }
 }
