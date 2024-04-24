@@ -14,17 +14,17 @@ void RobotOdometry::update(float dL_, float dR_) {
     float R = 0;
 
     if (deltaTheta != 0) {
-        float dC = (dL + dR) / 2;
+        float dC = (dR + dL) / 2;
         R = dC / deltaTheta;
         float newTheta = theta + deltaTheta;
-        x += R * (sin(newTheta) - sin(theta));
-        y += R * (cos(newTheta) - cos(theta));
+        x += dC * (sin(newTheta));
+        y += dC * (cos(newTheta));
         theta = fmod(newTheta, 2 * M_PI);
     } else {
         x += dL * cos(theta);
         y += dL * sin(theta);
-
     }
+    // Serial.println("Theta: " + String(degrees(theta), 2) + " | Pos x: " + String(x, 2) + " | Pos y: " + String(y, 2));
 }
 
 float RobotOdometry::getX() const {
@@ -47,9 +47,6 @@ bool RobotOdometry::checkLapCompletion(float x, float y, float threshold) {
     float startX = path.front().first;
     float startY = path.front().second;
     float distance = sqrt((x - startX) * (x - startX) + (y - startY) * (y - startY));
-
-    Serial.print(distance);
-
     return distance <= threshold;
 }
 

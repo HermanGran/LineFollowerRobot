@@ -22,7 +22,7 @@ PID pid(100,    // Base Speed
 // For Bluetooth
 Connections connections(pid);
 
-RobotOdometry odometry(16.0);
+RobotOdometry odometry(14.5);
 
 // Initializes state machine
 StateMachine stateMachine(pid, motorA, motorB, odometry);
@@ -75,8 +75,6 @@ void loop() {
     float dR = encoderBCount - prevBCount;
     odometry.update(dL, dR);
 
-    connections.updatePosition(odometry.getX(), odometry.getY(), degrees(odometry.getTheta()));
-    connections.updatePID();
     prevACount = encoderACount;
     prevBCount = encoderBCount;
 
@@ -84,7 +82,6 @@ void loop() {
     uint16_t position = qtr.readLineBlack(sensorValues);
     stateMachine.newState(sensorValues, position, sensorReadings);
 
-    connections.updatePID();
 }
 
 void handleEncoderA() {

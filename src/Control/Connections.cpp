@@ -6,7 +6,7 @@
 
 Connections::Connections(PID &pid) : pid(pid), pValue(pid.getPValue()), iValue(pid.getIValue()), dValue(pid.getDValue()) {
     positionService = new BLEService("12345678-1234-5678-1234-56789abcdef0");
-    positionCharacteristic = new BLEStringCharacteristic("87654321-4321-8765-4321-fedcba987654", BLERead | BLENotify, 30);
+    positionCharacteristic = new BLEStringCharacteristic("87654321-4321-8765-4321-fedcba987654", BLERead | BLENotify, 40);
 
     pidService = new BLEService("12345678-1234-5678-1234-56789abcdef1");
     pCharacteristic = new BLEFloatCharacteristic("abcd1234-ab12-ab12-ab12-abcdef123456", BLERead | BLEWrite);
@@ -44,7 +44,7 @@ void Connections::updatePosition(float x, float y, float theta) {
     BLEDevice central = BLE.central();
 
     if (central) {
-        String position = ("x: " + String(x, 2) + " , y: " + String(y, 2) + " , theta: " + String(theta, 2)); // Get the current position as a string
+        String position = ("x: " + String(x, 2) + " , y: " + String(y, 2) + " , theta: " + String(theta, 5)); // Get the current position as a string
         positionCharacteristic->writeValue(position);
     }
 
