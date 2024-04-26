@@ -32,6 +32,7 @@ private:
     BLEFloatCharacteristic *dCharacteristic;
 
     float pValue, iValue, dValue;
+    int update;
 };
 
 #endif //LINEFOLLOWERROBOT_CONNECTIONS_HPP

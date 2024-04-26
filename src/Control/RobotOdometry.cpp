@@ -17,14 +17,16 @@ void RobotOdometry::update(float dL_, float dR_) {
         float dC = (dR + dL) / 2;
         R = dC / deltaTheta;
         float newTheta = theta + deltaTheta;
-        x += dC * (sin(newTheta));
-        y += dC * (cos(newTheta));
+        x += R * (sin(newTheta) - sin(theta));
+        y += R * (cos(newTheta) - cos(theta));
         theta = fmod(newTheta, 2 * M_PI);
     } else {
-        x += dL * cos(theta);
-        y += dL * sin(theta);
+        x += dR * cos(theta);
+        y += dR * sin(theta);
     }
-    // Serial.println("Theta: " + String(degrees(theta), 2) + " | Pos x: " + String(x, 2) + " | Pos y: " + String(y, 2));
+    Serial.print(x);
+    Serial.print(",");
+    Serial.println(y);
 }
 
 float RobotOdometry::getX() const {

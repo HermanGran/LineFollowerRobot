@@ -13,6 +13,7 @@
 #include "Control/SensorReadings.hpp"
 #include <algorithm>
 #include "Control/RobotOdometry.hpp"
+#include "Control/Button.hpp"
 
 /**
  * Class for deciding what state
@@ -27,14 +28,14 @@ public:
      * @param motorA_ Takes in right motor
      * @param motorB_ Takes in left motor
      */
-    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry);
+    StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry, Button &button);
 
     /**
      * Testing new state
      * @param sensorValues_ Takes in a pointer to the sensor values
      * @param position_ Takes in the position of the line relative to the sensor
      */
-    void newState(const uint16_t *sensorValues_, uint16_t position_, SensorReadings &sensorReadings_);
+    void newState(uint16_t position_);
 
     /**
      * Function for changing state of robot, currently if-else
@@ -52,7 +53,9 @@ public:
      */
     int clamp(int val, int minVal, int maxVal);
 
+    PID& getPID();
 
+    Button& getButton();
 
 private:
     PID &pid;
@@ -61,6 +64,7 @@ private:
     Motor &motorB;
 
     RobotOdometry &odometry;
+    Button &button;
 };
 
 #endif //LINEFOLLOWERROBOT_STATEMACHINE_HPP
