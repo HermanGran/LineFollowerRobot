@@ -74,3 +74,20 @@ int PID::getIValue() const {
 int PID::getDValue() const {
     return kD;
 }
+
+void PID::setPValue(float value) {
+    kP = value;
+}
+
+void PID::setIValue(float value) {
+    kI = value;
+}
+
+void PID::setDValue(float value) {
+    kD = value;
+}
+
+void PID::setMotorSpeed(int speed) {
+    maxSpeed = speed;
+    baseSpeed = speed;
+}

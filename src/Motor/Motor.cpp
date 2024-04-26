@@ -34,3 +34,8 @@ void Motor::stop() const {
     digitalWrite(output, LOW);
     analogWrite(PWM, 0);
 }
+
+void Motor::turn(int motorSpeed) {
+    if (motorSpeed < 0) reverse(motorSpeed);
+    else forward(motorSpeed);
+}

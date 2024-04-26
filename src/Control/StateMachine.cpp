@@ -42,45 +42,30 @@ void StateMachine::newState(uint16_t position_) {
     if ((odometry.checkLapCompletion(odometry.getX(), odometry.getY(), 20)) && (odometry.getPath().size() > 1000)) {
         digitalWrite(14, LOW);
     }
-    /*
-    int linePos = 0;
-    if ((position_ > 6500) or (position_ < 1500 )) {
-        linePos = 1;
-        digitalWrite(14, LOW);
-        digitalWrite(15, LOW);
-        deviation = deviation*0;
-    } else {
-        linePos = 0;
-        digitalWrite(14, HIGH);
-        digitalWrite(15, HIGH);
-    }
-    */
 
     int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
     int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
     if (run) {
-
-        if (position_ == 0) {
-            motorA.forward(150);
-            motorB.reverse(40);
-        } else if (position_ == 8000) {
-            motorA.reverse(40);
-            motorB.forward(150);
-        } else {
+        if (turnFunction) {
+            if (position_ == 0) {
+                motorA.turn(rightTurnSpeedMotorA);
+                motorB.turn(rightTurnSpeedMotorB);
+            } else if (position_ == 8000) {
+                motorA.turn(leftTurnSpeedMotorA);
+                motorB.turn(leftTurnSpeedMotorB);
+            } else {
+                motorA.forward(motorSpeedA);
+                motorB.forward(motorSpeedB);
+            }
+            } else {
             motorA.forward(motorSpeedA);
             motorB.forward(motorSpeedB);
         }
-
-        //motorA.forward(motorSpeedA);
-        //motorB.forward(motorSpeedB);
     } else {
         motorA.stop();
         motorB.stop();
     }
-
-
-
 }
 
 int StateMachine::clamp(int val, int minVal, int maxVal) {
@@ -91,4 +76,24 @@ int StateMachine::clamp(int val, int minVal, int maxVal) {
 
 PID& StateMachine::getPID() {
     return pid;
+}
+
+void StateMachine::setLeftTurnSpeedMotorA(int speed) {
+    leftTurnSpeedMotorA = speed;
+    Serial.println(speed);
+}
+
+void StateMachine::setRightTurnSpeedMotorA(int speed) {
+    rightTurnSpeedMotorA = speed;
+    Serial.println(speed);
+}
+
+void StateMachine::setLeftTurnSpeedMotorB(int speed) {
+    leftTurnSpeedMotorB = speed;
+    Serial.println(speed);
+}
+
+void StateMachine::setRightTurnSpeedMotorB(int speed) {
+    rightTurnSpeedMotorB = speed;
+    Serial.println(speed);
 }

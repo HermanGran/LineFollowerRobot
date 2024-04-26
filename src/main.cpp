@@ -17,7 +17,7 @@ PID pid(130,    // Base Speed
         130,    // Max Speed
         4000);  // Target Position
 
-RobotServer server("HermaniPhone", "vanskelig", pid);
+
 
 // Motors
 Motor motorA(18, 19, 17);
@@ -33,6 +33,8 @@ RobotOdometry odometry(14.5);
 // Initializes state machine
 StateMachine stateMachine(pid, motorA, motorB, odometry, button);
 
+
+RobotServer server("HermaniPhone", "vanskelig", pid, stateMachine);
 // ---------- Encoder Stuff --------
 const int MotorAencoderA = 23;
 const int MotorAencoderB = 24;
@@ -88,8 +90,6 @@ void loop() {
     // Reads sensor value
     uint16_t position = qtr.readLineBlack(sensorValues);
     stateMachine.newState(position);
-
-
 }
 
 void handleEncoderA() {

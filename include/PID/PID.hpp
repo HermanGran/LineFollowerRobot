@@ -67,6 +67,14 @@ public:
 
     int getDValue() const;
 
+    void setPValue(float value);
+
+    void setIValue(float value);
+
+    void setDValue(float value);
+
+    void setMotorSpeed(int speed);
+
 private:
     double kP;
     double kI;
@@ -78,8 +86,8 @@ private:
 
     double lastError;
 
-    const int baseSpeed;
-    const int maxSpeed;
+    int baseSpeed;
+    int maxSpeed;
     int motorSpeed = 0;
 
     const int targetPosition;

@@ -40,6 +40,8 @@ public:
      */
     void stop() const;
 
+    void turn(int motorSpeed);
+
 private:
     int input;
     int output;

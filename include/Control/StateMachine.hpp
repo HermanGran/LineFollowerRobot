@@ -53,9 +53,16 @@ public:
      */
     int clamp(int val, int minVal, int maxVal);
 
+    void setTurnSpeed(int motorA, int motorB);
+
     PID& getPID();
 
     Button& getButton();
+
+    void setRightTurnSpeedMotorA(int speed);
+    void setLeftTurnSpeedMotorA(int speed);
+    void setRightTurnSpeedMotorB(int speed);
+    void setLeftTurnSpeedMotorB(int speed);
 
 private:
     PID &pid;
@@ -65,6 +72,13 @@ private:
 
     RobotOdometry &odometry;
     Button &button;
+
+    int rightTurnSpeedMotorA;
+    int leftTurnSpeedMotorA;
+    int rightTurnSpeedMotorB;
+    int leftTurnSpeedMotorB;
+
+    bool turnFunction = false;
 };
 
 #endif //LINEFOLLOWERROBOT_STATEMACHINE_HPP
