@@ -40,6 +40,10 @@ public:
      */
     void stop() const;
 
+    /**
+     * For driving forward and reverse given negative or positive integer
+     * @param motorSpeed Desired speed
+     */
     void turn(int motorSpeed);
 
 private:

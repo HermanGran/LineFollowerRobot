@@ -4,49 +4,68 @@
 
 #include "Motor/Encoder.hpp"
 
-Encoder* Encoder::instances[2] = {nullptr, nullptr};
+Encoder* Encoder::instanceA = nullptr;
+Encoder* Encoder::instanceB = nullptr;
 
-Encoder::Encoder(int pinA, int pinB) : inputA(pinA), inputB(pinB), encoderCount(0), prevEncoderCount(0) {
-    if (instances[0] == nullptr) {
-        instances[0] = this;
-    } else {
-        instances[1] = this;
-    }
+Encoder::Encoder(int pinA_, int pinB_)
+: pinA(pinA_), pinB(pinB_), encoderCountA(0), prevEncoderCountA(0), encoderCountB(0), prevEncoderCountB(0) {}
+
+
+void Encoder::setup() {
+    pinMode(pinA, INPUT);
+    pinMode(pinB, INPUT);
+    attachInterrupt(digitalPinToInterrupt(pinA), isrHandlerA, RISING);
+    attachInterrupt(digitalPinToInterrupt(pinA), isrHandlerB, RISING);
 }
 
-void Encoder::begin() {
-    pinMode(inputA, INPUT);
-    pinMode(inputB, INPUT);
-    attachInterrupt(digitalPinToInterrupt(inputA), handleInterruptA, RISING);
-    //attachInterrupt(digitalPinToInterrupt(inputB), handleInterruptB, CHANGE);
+void Encoder::isrHandlerA() {
+    instanceA->handleInterruptA();
+}
+
+void Encoder::isrHandlerB() {
+    instanceB->handleInterruptB();
 }
 
 void Encoder::handleInterruptA() {
-    for (int i = 0; i < 2; ++i) {
-        if (Encoder::instances[i] != nullptr && digitalRead(Encoder::instances[i]->inputA) > digitalRead(Encoder::instances[i]->inputB)) {
-            Encoder::instances[i]->encoderCount++;
-        }
+    if (digitalRead(instanceA->pinA) > digitalRead(instanceA->pinB)) {
+        instanceA->encoderCountA++;
+    } else {
+        instanceA->encoderCountA--;
     }
 }
 
 void Encoder::handleInterruptB() {
-    for (int i = 0; i < 2; ++i) {
-        if (Encoder::instances[i] != nullptr && digitalRead(Encoder::instances[i]->inputA) < digitalRead(Encoder::instances[i]->inputB)) {
-            Encoder::instances[i]->encoderCount--;
-        }
+    if (digitalRead(instanceB->pinA) > digitalRead(instanceB->pinB)) {
+        instanceB->encoderCountB++;
+    } else {
+        instanceB->encoderCountB--;
     }
 }
 
-long Encoder::getEncoderCount() const {
-    return encoderCount;
+long Encoder::getEncoderCountA() const {
+    return encoderCountA;
 }
 
-void Encoder::resetEncoderCount() {
-    encoderCount = 0;
+long Encoder::getEncoderCountB() const {
+    return encoderCountB;
 }
 
-float Encoder::getDeltaEncoderCount() {
-    float deltaEncoderCount = encoderCount - prevEncoderCount;
-    prevEncoderCount = encoderCount;
+void Encoder::resetEncoderCountA() {
+    encoderCountA = 0;
+}
+
+void Encoder::resetEncoderCountB() {
+    encoderCountB = 0;
+}
+
+float Encoder::getDeltaEncoderCountA() {
+    float deltaEncoderCount = encoderCountA - prevEncoderCountA;
+    prevEncoderCountA = encoderCountA;
+    return deltaEncoderCount;
+}
+
+float Encoder::getDeltaEncoderCountB() {
+    float deltaEncoderCount = encoderCountB- prevEncoderCountB;
+    prevEncoderCountB = encoderCountB;
     return deltaEncoderCount;
 }

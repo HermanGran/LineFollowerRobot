@@ -35,7 +35,8 @@ void Motor::stop() const {
     analogWrite(PWM, 0);
 }
 
+// Used for setting speed from web browser to convert negative ro reverse
 void Motor::turn(int motorSpeed) {
-    if (motorSpeed < 0) reverse(motorSpeed);
-    else forward(motorSpeed);
+    if (motorSpeed < 0) reverse(abs(motorSpeed));
+    else forward(abs(motorSpeed));
 }

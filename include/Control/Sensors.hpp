@@ -17,7 +17,7 @@ public:
      * Constructor for initializing sensor
      * @param numSensors Number of sensors in use
      */
-    explicit Sensors(int sensorCount_, QTRSensors& qtr_);
+    explicit Sensors(int sensorCount_);
 
     /**
      * Setting up sensor
@@ -33,11 +33,11 @@ public:
      * Function for retrieving a reference for QTRSensors
      * @return Reference for QTRSensors
      */
-    QTRSensors& getQTRSensor();
+    QTRSensors* getQTRSensor();
 
 private:
     const uint8_t sensorCount;
-    QTRSensors& qtr;
+    QTRSensors *qtr;
 };
 
 #endif //LINEFOLLOWERROBOT_SENSORS_HPP

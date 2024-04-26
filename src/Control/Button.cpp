@@ -4,13 +4,15 @@
 
 #include "Control/Button.hpp"
 
-Button::Button(const int buttonPin_, unsigned long debounceDuration_) : buttonPin(buttonPin_), debounceDuration(debounceDuration_), lastButtonState(
-        false), lastTimeButtonStateChanged(0) {}
+// Constructor for button class
+Button::Button(const int buttonPin_, unsigned long debounceDuration_) : buttonPin(buttonPin_), debounceDuration(debounceDuration_), lastButtonState(false), lastTimeButtonStateChanged(0) {}
 
+// To initialize the button
 void Button::setup() {
     pinMode(buttonPin, INPUT_PULLUP);
 }
 
+// Function for setting toggleState true or false with the button
 bool Button::readState() {
     int currentButtonState = digitalRead(buttonPin);
     unsigned long currentTime = millis();
@@ -31,6 +33,7 @@ bool Button::readState() {
     return toggleState;
 }
 
+// Function for setting toggleState true or false
 void Button::setToggleState(bool toggleState_) {
     toggleState = toggleState_;
 }

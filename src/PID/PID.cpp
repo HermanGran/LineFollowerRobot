@@ -63,30 +63,37 @@ int PID::getTargetPosition() const {
     return targetPosition;
 }
 
+// Returns current P value
 int PID::getPValue() const {
     return kP;
 }
 
+// Returns current I value
 int PID::getIValue() const {
     return kI;
 }
 
+// Returns current D value
 int PID::getDValue() const {
     return kD;
 }
 
+// Sets P value
 void PID::setPValue(float value) {
     kP = value;
 }
 
+// Sets I value
 void PID::setIValue(float value) {
     kI = value;
 }
 
+// Sets D value
 void PID::setDValue(float value) {
     kD = value;
 }
 
+// Sets motor speed
 void PID::setMotorSpeed(int speed) {
     maxSpeed = speed;
     baseSpeed = speed;

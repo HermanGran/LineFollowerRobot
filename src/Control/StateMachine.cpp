@@ -5,48 +5,16 @@
 #include "Control/StateMachine.hpp"
 
 // Constructor for state machine class
-StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry, Button &button) : pid(pid_), motorA(motorA_), motorB(motorB_), odometry(odometry), button(button) {}
+StateMachine::StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry, Button &button)
+: pid(pid_), motorA(motorA_), motorB(motorB_), odometry(odometry), button(button), rightTurnSpeedMotorA(0), leftTurnSpeedMotorA(0), rightTurnSpeedMotorB(0), leftTurnSpeedMotorB(0) {}
 
 // Function for changing state
-void StateMachine::state(const uint16_t *sensorValues_, uint16_t position_) {
-
-    // Checks to see if aggressive PID is needed
-    int linePos = 0;
-    if ( (position_ > 7000) or (position_ < 2000 )) {
-        linePos = 1;
-    }
-
-    // Calculates motor Speed
-    int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
-    int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
-
-    // Sets the speed for motors
-    if (position_ == 0) {
-        motorA.reverse(20);
-        motorB.reverse(120);
-    } else if (position_ == 8000) {
-        motorA.reverse(120);
-        motorB.reverse(20);
-    } else {
-        motorA.forward(motorSpeedA);
-        motorB.forward(motorSpeedB);
-    }
-}
-
-void StateMachine::newState(uint16_t position_) {
-
-    bool run = button.readState();
-
-    odometry.logPosition(odometry.getX(), odometry.getY());
-
-    if ((odometry.checkLapCompletion(odometry.getX(), odometry.getY(), 20)) && (odometry.getPath().size() > 1000)) {
-        digitalWrite(14, LOW);
-    }
+void StateMachine::state(uint16_t position_, bool toggleState) {
 
     int motorSpeedA = clamp(pid.getBaseSpeed() + pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
     int motorSpeedB = clamp(pid.getBaseSpeed() - pid.calculatePID(position_, 0), 0, pid.getMaxSpeed());
 
-    if (run) {
+    if (toggleState) {
         if (turnFunction) {
             if (position_ == 0) {
                 motorA.turn(rightTurnSpeedMotorA);
@@ -68,32 +36,58 @@ void StateMachine::newState(uint16_t position_) {
     }
 }
 
+// Clamping values between min and max
 int StateMachine::clamp(int val, int minVal, int maxVal) {
     if (val < minVal) return minVal;
     else if (val > maxVal) return maxVal;
     else return val;
 }
 
-PID& StateMachine::getPID() {
-    return pid;
+// Initializing speeds for turning in 90 degree corners
+void StateMachine::setTurnSpeed(int rightMotorA, int leftMotorA, int rightMotorB, int leftMotorB) {
+    turnFunction = true;
+    rightTurnSpeedMotorA = rightMotorA;
+    leftTurnSpeedMotorA = leftMotorA;
+    rightTurnSpeedMotorB = rightMotorB;
+    leftTurnSpeedMotorB = leftMotorB;
 }
 
+// Sets left turn speed for motor A
 void StateMachine::setLeftTurnSpeedMotorA(int speed) {
     leftTurnSpeedMotorA = speed;
-    Serial.println(speed);
 }
 
+// Sets right turn speed for motor A
 void StateMachine::setRightTurnSpeedMotorA(int speed) {
     rightTurnSpeedMotorA = speed;
-    Serial.println(speed);
 }
 
+// Sets left turn speed for motor B
 void StateMachine::setLeftTurnSpeedMotorB(int speed) {
     leftTurnSpeedMotorB = speed;
-    Serial.println(speed);
 }
 
+// Sets right turn speed for motor B
 void StateMachine::setRightTurnSpeedMotorB(int speed) {
     rightTurnSpeedMotorB = speed;
-    Serial.println(speed);
+}
+
+// Gets current left turn speed motor A
+int StateMachine::getLeftTurnSpeedMotorA() const {
+    return leftTurnSpeedMotorA;
+}
+
+// Gets current right turn speed motor A
+int StateMachine::getRightTurnSpeedMotorA() const {
+    return rightTurnSpeedMotorA;
+}
+
+// Gets current left turn speed motor B
+int StateMachine::getLeftTurnSpeedMotorB() const {
+    return leftTurnSpeedMotorB;
+}
+
+// Gets current right turn speed motor B
+int StateMachine::getRightTurnSpeedMotorB() const {
+    return rightTurnSpeedMotorB;
 }

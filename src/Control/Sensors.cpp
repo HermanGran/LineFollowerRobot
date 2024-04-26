@@ -5,12 +5,14 @@
 #include "Control/Sensors.hpp"
 
 // Constructor for sensors
-Sensors::Sensors(int sensorCount_, QTRSensors& qtr_) : sensorCount(sensorCount_), qtr(qtr_) {}
+Sensors::Sensors(int sensorCount_) : sensorCount(sensorCount_) {
+    qtr = new QTRSensors;
+}
 
 // Setup for sensors
 void Sensors::setup() {
-    qtr.setTypeRC();
-    qtr.setSensorPins((const uint8_t[]) {4, 5, 6, 7, 8, 9, 10, 11, 12}, sensorCount);
+    qtr->setTypeRC();
+    qtr->setSensorPins((const uint8_t[]) {4, 5, 6, 7, 8, 9, 10, 11, 12}, sensorCount);
 }
 
 // Function for calibrating sensors
@@ -24,7 +26,7 @@ void Sensors::calibrate() {
     digitalWrite(14, LOW);
 
     for (uint16_t i = 0; i < 400; i++) {
-        qtr.calibrate();
+        qtr->calibrate();
     }
 
     digitalWrite(14, HIGH);
@@ -36,6 +38,6 @@ void Sensors::calibrate() {
 }
 
 // Function for returning reference for QTR
-QTRSensors& Sensors::getQTRSensor() {
+QTRSensors* Sensors::getQTRSensor() {
     return qtr;
 }

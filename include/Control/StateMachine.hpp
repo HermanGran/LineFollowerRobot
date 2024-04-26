@@ -31,18 +31,11 @@ public:
     StateMachine(PID &pid_, Motor &motorA_, Motor &motorB_, RobotOdometry &odometry, Button &button);
 
     /**
-     * Testing new state
-     * @param sensorValues_ Takes in a pointer to the sensor values
-     * @param position_ Takes in the position of the line relative to the sensor
-     */
-    void newState(uint16_t position_);
-
-    /**
      * Function for changing state of robot, currently if-else
      * @param sensorValues_ Takes in a pointer to the sensor values
      * @param position_ Takes in the position of the line relative to the sensor
      */
-    void state(const uint16_t *sensorValues_, uint16_t position_);
+    void state(uint16_t position_, bool toggleState);
 
     /**
      * Self made function for clamp
@@ -51,25 +44,70 @@ public:
      * @param maxVal Max value range
      * @return Clamped value
      */
-    int clamp(int val, int minVal, int maxVal);
+    static int clamp(int val, int minVal, int maxVal);
 
-    void setTurnSpeed(int motorA, int motorB);
+    /**
+     * Initializing turn speeds for corners
+     * @param rightMotorA
+     * @param leftMotorA
+     * @param rightMotorB
+     * @param leftMotorB
+     */
+    void setTurnSpeed(int rightMotorA, int leftMotorA, int rightMotorB, int leftMotorB);
 
-    PID& getPID();
-
-    Button& getButton();
-
+    /**
+     * Sets right turn speed for motor A
+     * @param speed desired speed value
+     */
     void setRightTurnSpeedMotorA(int speed);
+
+    /**
+     * Sets left turn speed for motor A
+     * @param speed desired speed value
+     */
     void setLeftTurnSpeedMotorA(int speed);
+
+    /**
+     * Sets right turn speed for motor B
+     * @param speed desired speed value
+     */
     void setRightTurnSpeedMotorB(int speed);
+
+    /**
+     * Sets left turn speed for motor B
+     * @param speed desired speed value
+     */
     void setLeftTurnSpeedMotorB(int speed);
+
+    /**
+     * Getter function for right turn speed for motor A
+     * @return current speed
+     */
+    int getRightTurnSpeedMotorA() const;
+
+    /**
+     * Getter function for left turn speed for motor A
+     * @return current speed
+     */
+    int getLeftTurnSpeedMotorA() const;
+
+    /**
+     * Getter function for right turn speed for motor B
+     * @return current speed
+     */
+    int getRightTurnSpeedMotorB() const;
+
+    /**
+     * Getter function for left turn speed for motor B
+     * @return current speed
+     */
+    int getLeftTurnSpeedMotorB() const;
+
 
 private:
     PID &pid;
-
     Motor &motorA;
     Motor &motorB;
-
     RobotOdometry &odometry;
     Button &button;
 

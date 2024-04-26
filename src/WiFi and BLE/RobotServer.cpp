@@ -2,13 +2,13 @@
 // Created by Herman Hårstad Gran on 26/04/2024.
 //
 
-#include "WiFi/RobotServer.hpp"
+#include "WiFi and BLE/RobotServer.hpp"
 
 RobotServer::RobotServer(const char* ssid_, const char* password_, PID &pid, StateMachine &stateMachine) : ssid(ssid_), password(password_), timeoutTime(2000), pid(pid), stateMachine(stateMachine) {
     server = new WiFiServer(80);
 }
 
-void RobotServer::connect() {
+void RobotServer::setup() {
     Serial.print("Connecting to ");
     Serial.println(ssid);
 
@@ -45,11 +45,10 @@ void RobotServer::update() {
                         handlePIDUpdate(header);
 
                         displayWebPage(client);
-                        displayButtons(client);
-                        client.stop();
+                        displayPIDControl(client);
+                        displayMotorSpeedControls(client);
 
-                        Serial.println("");
-
+                        Serial.println();
                         break;
                     } else {  // process the current line
                         currentLine = ""; // reset current line
@@ -162,7 +161,7 @@ void RobotServer::displayWebPage(WiFiClient &client) {
     client.println("<body><h1>LineFollowerRobot</h1>");
 }
 
-void RobotServer::displayButtons(WiFiClient &client) {
+void RobotServer::displayPIDControl(WiFiClient &client) {
     client.println("<h2>Update PID Values</h2>");
 
 // Display current PID values
@@ -171,7 +170,6 @@ void RobotServer::displayButtons(WiFiClient &client) {
     client.println("<li>Proportional (P): " + String(pid.getPValue()) + "</li>");
     client.println("<li>Integral (I): " + String(pid.getIValue()) + "</li>");
     client.println("<li>Derivative (D): " + String(pid.getDValue()) + "</li>");
-    client.println("<li>Max speed: " + String(pid.getMaxSpeed()) + "</li>");
     client.println("</ul>");
 
     // P Value
@@ -195,37 +193,76 @@ void RobotServer::displayButtons(WiFiClient &client) {
     client.println("<input type=\"submit\" value=\"Update D\">");
     client.println("</form>");
 
+}
+
+void RobotServer::displayMotorSpeedControls(WiFiClient &client) {
     // Motor speed Value
+
+    client.println("<h2>Speed control</h2>");
+    client.println("<ul>");
+    client.println("<li>Current speed:" + String(pid.getMaxSpeed()) + "</li>");
+    client.println("</ul>");
+
     client.println("<form action=\"/updateSpeed\" method=\"GET\">");
     client.println("<label for=\"Speed\">Speed: </label><br>");
     client.println("<input type=\"text\" id=\"Speed\" name=\"Motor speed\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 
-    // Motor Turn speed
+    // Left Turn speed
+    client.println("<h2>Left turn</h2>");
+    client.println("<p>Current speeds:</p>");
+    client.println("<ul>");
+    client.println("<li>Motor A:" + String(stateMachine.getLeftTurnSpeedMotorA()) + "</li>");
+    client.println("<li>Motor B:" + String(stateMachine.getLeftTurnSpeedMotorB()) + "</li>");
+    client.println("</ul>");
+
     client.println("<form action=\"/updateLeftTurnMotorA\" method=\"GET\">");
     client.println("<label for=\"Speed\">Motor A Left Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"Speed\" name=\"Motor A Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<input type=\"text\" id=\"SpeedL MotorA\" name=\"Motor A Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
+
+    client.println("<form action=\"/updateLeftTurnMotorB\" method=\"GET\">");
+    client.println("<label for=\"Speed\">Motor B left Turn Speed: </label><br>");
+    client.println("<input type=\"text\" id=\"SpeedL MotorB\" name=\"Motor B Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<input type=\"submit\" value=\"Update Speed\">");
+    client.println("</form>");
+
+    client.println("<h2>Right turn</h2>");
+    client.println("<p>Current speeds:</p>");
+    client.println("<ul>");
+    client.println("<li>Motor A:" + String(stateMachine.getRightTurnSpeedMotorA()) + "</li>");
+    client.println("<li>Motor B:" + String(stateMachine.getRightTurnSpeedMotorB()) + "</li>");
+    client.println("</ul>");
 
     client.println("<form action=\"/updateRightTurnMotorA\" method=\"GET\">");
     client.println("<label for=\"Speed\">Motor A Right Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"Speed\" name=\"Motor A Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
-    client.println("<input type=\"submit\" value=\"Update Speed\">");
-    client.println("</form>");
-
-    // MotorB Turn Speed
-    client.println("<form action=\"/updateLeftTurnMotorB\" method=\"GET\">");
-    client.println("<label for=\"Speed\">Motor B left Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"Speed\" name=\"Motor B Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<input type=\"text\" id=\"SpeedR MotorA\" name=\"Motor A Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 
     client.println("<form action=\"/updateRightTurnMotorB\" method=\"GET\">");
     client.println("<label for=\"Speed\">Motor B Right Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"Speed\" name=\"Motor B Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<input type=\"text\" id=\"SpeedR MotorB\" name=\"Motor B Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 }
 
+void RobotServer::sendCoordinate(float x, float y) {
+    WiFiClient client = server->available();
+
+    if (client.available()) {
+        client.printf("");
+    }
+}
+
+void RobotServer::displayNewWebPage(WiFiClient &client) {
+    client.println(R"rawliteral(
+<!DOCTYPE html>
+<html lang="en"
+<head>
+<meta charset="UTF-8">
+<title>Turn Configuration</title>
+)rawliteral");
+}

@@ -61,18 +61,46 @@ public:
      */
     int getTargetPosition() const;
 
+    /**
+     * Getter function for P value
+     * @return Current P value
+     */
     int getPValue() const;
 
+    /**
+     * Getter function for I value
+     * @return Current I value
+     */
     int getIValue() const;
 
+    /**
+     * Getter function for D value
+     * @return Current D value
+     */
     int getDValue() const;
 
+    /**
+     * Setter function for P value
+     * @param value New P value
+     */
     void setPValue(float value);
 
+    /**
+     * Setter function for I value
+     * @param value New I value
+     */
     void setIValue(float value);
 
+    /**
+     * Setter function for D value
+     * @param value New D value
+     */
     void setDValue(float value);
 
+    /**
+     * Setter function for motor speed
+     * @param speed New speed
+     */
     void setMotorSpeed(int speed);
 
 private:
@@ -93,7 +121,6 @@ private:
     const int targetPosition;
     int position;
 
-    // New test values
     unsigned long prevT = 0;
     float ePrev = 0;
     float eIntegral = 0;
