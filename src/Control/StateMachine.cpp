@@ -91,3 +91,15 @@ int StateMachine::getLeftTurnSpeedMotorB() const {
 int StateMachine::getRightTurnSpeedMotorB() const {
     return rightTurnSpeedMotorB;
 }
+
+bool StateMachine::getTurnFunctionState() const {
+    return turnFunction;
+}
+
+Button &StateMachine::getButton() {
+    return button;
+}
+
+void StateMachine::setTurnFunctionState(bool state) {
+    turnFunction = state;
+}

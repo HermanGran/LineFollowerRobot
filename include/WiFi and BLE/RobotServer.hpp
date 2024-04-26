@@ -60,7 +60,7 @@ private:
 
     void displayPIDControl(WiFiClient &client);
 
-    void displayOnOffButtons(WiFiClient &client);
+    void displayOnOffButtons(WiFiClient &client, const String &line);
 
     void displayMotorSpeedControls(WiFiClient &client);
 
@@ -70,6 +70,9 @@ private:
     void updatePIDComponent(const String &line, char component);
     void sendHTTPHeaders(WiFiClient &client);
     void updateSpeed(const String &line, int motor);
+
+    bool robotState = false;
+    bool turnFunction = true;
 };
 
 #endif //LINEFOLLOWERROBOT_WIFI_HPP

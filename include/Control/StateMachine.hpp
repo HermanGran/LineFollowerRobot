@@ -103,7 +103,11 @@ public:
      */
     int getLeftTurnSpeedMotorB() const;
 
+    bool getTurnFunctionState() const;
 
+    void setTurnFunctionState(bool state);
+
+    Button &getButton();
 private:
     PID &pid;
     Motor &motorA;

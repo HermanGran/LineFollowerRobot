@@ -41,13 +41,14 @@ void RobotServer::update() {
                 if (c == '\n') {  // end of line
                     if (currentLine.length() == 0) {  // if the line is empty, it means the HTTP request end
                         sendHTTPHeaders(client);
-
                         handlePIDUpdate(header);
-
                         displayWebPage(client);
+                        displayOnOffButtons(client, header);
                         displayPIDControl(client);
                         displayMotorSpeedControls(client);
 
+
+                        client.println("</body></html>");
                         Serial.println();
                         break;
                     } else {  // process the current line
@@ -153,9 +154,27 @@ void RobotServer::displayWebPage(WiFiClient &client) {
     // CSS to style the on/off buttons
     // Feel free to change the background-color and font-size attributes to fit your preferences
     client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
-    client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
-    client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
-    client.println(".button2 {background-color: #555555;}</style></head>");
+    client.println(".button {\n"
+                   "  background-color: #04AA6D;\n"
+                   "  border: none;\n"
+                   "  color: white;\n"
+                   "  padding: 15px 32px;\n"
+                   "  text-align: center;\n"
+                   "  text-decoration: none;\n"
+                   "  display: inline-block;\n"
+                   "  font-size: 16px;\n"
+                   "}");
+    client.println(".button2 {\n"
+                   "  background-color: #f44336;\n"
+                   "  border: none;\n"
+                   "  color: white;\n"
+                   "  padding: 15px 32px;\n"
+                   "  text-align: center;\n"
+                   "  text-decoration: none;\n"
+                   "  display: inline-block;\n"
+                   "  font-size: 16px;\n"
+                   "}");
+    client.println("</style></head>");
 
     // Web Page Heading
     client.println("<body><h1>LineFollowerRobot</h1>");
@@ -167,9 +186,9 @@ void RobotServer::displayPIDControl(WiFiClient &client) {
 // Display current PID values
     client.println("<p>Current PID Values:</p>");
     client.println("<ul>");
-    client.println("<li>Proportional (P): " + String(pid.getPValue()) + "</li>");
-    client.println("<li>Integral (I): " + String(pid.getIValue()) + "</li>");
-    client.println("<li>Derivative (D): " + String(pid.getDValue()) + "</li>");
+    client.println("<li><strong>Proportional (P):</strong> " + String(pid.getPValue()) + "</li>");
+    client.println("<li><strong>Integral (I):</strong> " + String(pid.getIValue()) + "</li>");
+    client.println("<li><strong>Derivative (D):</strong> " + String(pid.getDValue()) + "</li>");
     client.println("</ul>");
 
     // P Value
@@ -200,7 +219,7 @@ void RobotServer::displayMotorSpeedControls(WiFiClient &client) {
 
     client.println("<h2>Speed control</h2>");
     client.println("<ul>");
-    client.println("<li>Current speed:" + String(pid.getMaxSpeed()) + "</li>");
+    client.println("<li><strong>Current speed:</strong> " + String(pid.getMaxSpeed()) + "</li>");
     client.println("</ul>");
 
     client.println("<form action=\"/updateSpeed\" method=\"GET\">");
@@ -213,38 +232,38 @@ void RobotServer::displayMotorSpeedControls(WiFiClient &client) {
     client.println("<h2>Left turn</h2>");
     client.println("<p>Current speeds:</p>");
     client.println("<ul>");
-    client.println("<li>Motor A:" + String(stateMachine.getLeftTurnSpeedMotorA()) + "</li>");
-    client.println("<li>Motor B:" + String(stateMachine.getLeftTurnSpeedMotorB()) + "</li>");
+    client.println("<li><strong>Motor A:</strong> " + String(stateMachine.getLeftTurnSpeedMotorA()) + "</li>");
+    client.println("<li><strong>Motor B:</strong> " + String(stateMachine.getLeftTurnSpeedMotorB()) + "</li>");
     client.println("</ul>");
 
     client.println("<form action=\"/updateLeftTurnMotorA\" method=\"GET\">");
-    client.println("<label for=\"Speed\">Motor A Left Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"SpeedL MotorA\" name=\"Motor A Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<label for=\"Speed\">Motor A: </label><br>");
+    client.println("<input type=\"text\" id=\"SpeedL MotorA\" name=\"Motor A left turn\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 
     client.println("<form action=\"/updateLeftTurnMotorB\" method=\"GET\">");
-    client.println("<label for=\"Speed\">Motor B left Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"SpeedL MotorB\" name=\"Motor B Left Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<label for=\"Speed\">Motor B: </label><br>");
+    client.println("<input type=\"text\" id=\"SpeedL MotorB\" name=\"Motor B left turn\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 
     client.println("<h2>Right turn</h2>");
     client.println("<p>Current speeds:</p>");
     client.println("<ul>");
-    client.println("<li>Motor A:" + String(stateMachine.getRightTurnSpeedMotorA()) + "</li>");
-    client.println("<li>Motor B:" + String(stateMachine.getRightTurnSpeedMotorB()) + "</li>");
+    client.println("<li><strong>Motor A:</strong> " + String(stateMachine.getRightTurnSpeedMotorA()) + "</li>");
+    client.println("<li><strong>Motor B:</strong> " + String(stateMachine.getRightTurnSpeedMotorB()) + "</li>");
     client.println("</ul>");
 
     client.println("<form action=\"/updateRightTurnMotorA\" method=\"GET\">");
-    client.println("<label for=\"Speed\">Motor A Right Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"SpeedR MotorA\" name=\"Motor A Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<label for=\"Speed\">Motor A: </label><br>");
+    client.println("<input type=\"text\" id=\"SpeedR MotorA\" name=\"Motor A right turn\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 
     client.println("<form action=\"/updateRightTurnMotorB\" method=\"GET\">");
-    client.println("<label for=\"Speed\">Motor B Right Turn Speed: </label><br>");
-    client.println("<input type=\"text\" id=\"SpeedR MotorB\" name=\"Motor B Right Turn Speed\" value=\"" + String(speed) + "\"><br>");
+    client.println("<label for=\"Speed\">Motor B: </label><br>");
+    client.println("<input type=\"text\" id=\"SpeedR MotorB\" name=\"Motor B right turn\" value=\"" + String(speed) + "\"><br>");
     client.println("<input type=\"submit\" value=\"Update Speed\">");
     client.println("</form>");
 }
@@ -265,4 +284,34 @@ void RobotServer::displayNewWebPage(WiFiClient &client) {
 <meta charset="UTF-8">
 <title>Turn Configuration</title>
 )rawliteral");
+}
+
+void RobotServer::displayOnOffButtons(WiFiClient &client, const String &line) {
+    // Determine the action based on the received URL path
+    if (line.startsWith("GET /Robot/on")) {
+        stateMachine.getButton().setToggleState(true);
+    } else if (line.startsWith("GET /Robot/off")) {
+        stateMachine.getButton().setToggleState(false);
+    }
+
+    if (line.startsWith("GET /turnFunction/on")) {
+        stateMachine.setTurnFunctionState(true);
+    } else if (line.startsWith("GET /turnFunction/off")) {
+        stateMachine.setTurnFunctionState(false); // Corrected to set state to false
+    }
+
+    // Dynamically display buttons based on the current state
+    client.println("<p>Robot Power:</p>");
+    if (stateMachine.getButton().readState()) {
+        client.println("<p><a href=\"/Robot/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
+    } else {
+        client.println("<p><a href=\"/Robot/on\"><button class=\"button\">Turn ON</button></a></p>");
+    }
+
+    client.println("<p>Turn Function:</p>");
+    if (stateMachine.getTurnFunctionState()) {
+        client.println("<p><a href=\"/turnFunction/off\"><button class=\"button button2\">Turn OFF</button></a></p>");
+    } else {
+        client.println("<p><a href=\"/turnFunction/on\"><button class=\"button\">Turn ON</button></a></p>");
+    }
 }
