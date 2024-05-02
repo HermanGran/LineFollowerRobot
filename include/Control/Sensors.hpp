@@ -35,8 +35,15 @@ public:
      */
     QTRSensors* getQTRSensor();
 
+    /**
+     * Retrieves a pointer to the sensor values
+     * @return a pointer to the vector of sensor values
+     */
+    uint16_t* getSensorValues();
+
 private:
     const uint8_t sensorCount;
+    uint16_t sensorValues;
     QTRSensors *qtr;
 };
 

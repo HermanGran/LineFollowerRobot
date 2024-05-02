@@ -10,7 +10,7 @@ Sensors sensor(9);
 uint16_t sensorValues[9];
 
 // Base speed | Max speed | Target position
-PID pid(130, 130, 4000);
+PID pid(140, 140, 4000);
 
 // Motors
 Motor motorA(18, 19, 17);
@@ -32,13 +32,14 @@ void setup() {
     Serial.begin(115200);
 
     // Setting PID values P, I, D
-    pid.setPID(40, 0, 1.5);
+    pid.setPID(15, 0, 30);
     pid.setAggressivePID(20, 0, 0);
-    stateMachine.setTurnSpeed(100, -100, -100, 100);
+
+    // Setting turn speed values
+    stateMachine.setTurnSpeed(-150, -40, -40, -150);
 
     // Setup
     button.setup();
-
     server.setup();
 
     motorA.setup();

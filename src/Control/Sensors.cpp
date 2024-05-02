@@ -5,7 +5,7 @@
 #include "Control/Sensors.hpp"
 
 // Constructor for sensors
-Sensors::Sensors(int sensorCount_) : sensorCount(sensorCount_) {
+Sensors::Sensors(int sensorCount_) : sensorCount(sensorCount_), sensorValues(sensorCount_) {
     qtr = new QTRSensors;
 }
 
@@ -40,4 +40,9 @@ void Sensors::calibrate() {
 // Function for returning reference for QTR
 QTRSensors* Sensors::getQTRSensor() {
     return qtr;
+}
+
+// For retrieving array with sensor values
+uint16_t* Sensors::getSensorValues() {
+    return &sensorValues;
 }
